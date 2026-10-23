@@ -2,6 +2,10 @@
   "schemaVersion": 2,
   "registeredRepository": "up160/noise-monitor",
   "readableRoots": [
+    "AGENTS.md",
+    "README.md",
+    "CHANGELOG.md",
+    "package.json",
     "src",
     "test",
     "docs",
