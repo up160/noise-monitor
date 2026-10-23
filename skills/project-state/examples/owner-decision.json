@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "repository": "up160/ai-engineering-system",
+    "engineering_system_version": "0.1.9",
+    "phase": "discovery",
+    "lifecycle_state": "active",
+    "owner_set": false
+  },
+  "active_work": {
+    "issue_number": 13,
+    "title": "Prove the core bootstrap end-to-end gate",
+    "purpose": "Demonstrate the full delivery path before the system runs production MVP work.",
+    "workflow_status": "Blocked",
+    "workflow_transition": "blocked",
+    "implementation_owner": "owner",
+      "assigned_implementer": "owner",
+      "assigned_reviewer": "codex"
+  },
+  "pull_request": null,
+  "review": {
+    "status": "not-started",
+    "unresolved_findings": []
+  },
+  "checks": {
+    "status": "none",
+    "entries": []
+  },
+  "dependencies": {
+    "action": "claim",
+    "state": "blocked-gate-approval",
+    "eligible": false,
+    "route_to_pm": false,
+    "blocker_ids": [
+      "gate:owner:bootstrap-signoff"
+    ],
+    "reason_codes": [
+      "blocked-gate-approval"
+    ],
+    "blockers": [
+      {
+        "id": "gate:owner:bootstrap-signoff",
+        "reason_code": "blocked-gate-approval",
+        "detail": "owner:bootstrap-signoff has no explicit GitHub approval",
+        "route_to_pm": false,
+        "escalation": "needs-owner"
+      }
+    ],
+    "snapshot_id": "3d4c5b6a798809981f2e3d4ca7b6c5d43d4c5b6a",
+    "observed_at": "2026-09-02T09:30:00Z"
+  },
+  "specification": {
+    "path": "docs/spec.md",
+    "requirement_refs": [
+      "R5",
+      "R9"
+    ],
+    "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+    "state": "fresh"
+  },
+  "adr": {
+    "disposition": "adr-existing",
+    "applicable_adrs": [
+      "ADR-0005"
+    ],
+    "reason": null
+  },
+  "security_flags": [],
+  "next_expected": {
+    "workflow_status": "Blocked",
+    "workflow_transition": "blocked",
+    "action": "Record the owner bootstrap sign-off gate decision on issue #13."
+  },
+  "owner_action_required": true,
+  "owner_action": {
+    "reason": "The owner bootstrap sign-off gate for issue #13 has no recorded approval or refusal.",
+    "action": "Approve or refuse gate owner:bootstrap-signoff on up160/ai-engineering-system#13."
+  },
+  "freshness": {
+    "observed_at": "2026-09-02T09:30:05Z",
+    "sources": [
+      {
+        "kind": "project-config",
+        "locator": ".ai/project.yml",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-issue",
+        "locator": "up160/ai-engineering-system#13",
+        "revision": null,
+        "updated_at": "2026-09-02T09:07:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-pull-request",
+        "locator": "up160/ai-engineering-system#13 linked pull requests",
+        "revision": null,
+        "updated_at": "2026-09-02T09:29:00Z",
+        "state": "missing"
+      },
+      {
+        "kind": "github-project",
+        "locator": "up160 project 1 / Status",
+        "revision": null,
+        "updated_at": "2026-09-02T09:29:30Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "dependency-gate",
+        "locator": "dependency-evaluation:3d4c5b6a798809981f2e3d4ca7b6c5d43d4c5b6a",
+        "revision": "3d4c5b6a798809981f2e3d4ca7b6c5d43d4c5b6a",
+        "updated_at": "2026-09-02T09:30:00Z",
+        "state": "fresh"
+      }
+    ]
+  },
+  "conflicts": []
+}

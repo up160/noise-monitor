@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "executable": "claude",
+  "minimumVersion": "2.1.248",
+  "timeoutMs": 900000,
+  "probeTimeoutMs": 20000,
+  "maxTurns": 30
+}

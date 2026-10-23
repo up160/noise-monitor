@@ -1,0 +1,305 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://up160.github.io/ai-engineering-system/skills/prepare-task/schema.json",
+  "title": "prepare-task packet",
+  "description": "Bounded, validated work packet derived from a refreshed project-state snapshot and one authoritative GitHub issue/PDR.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "skill",
+    "engineering_system_version",
+    "repository",
+    "issue_number",
+    "acting_job",
+    "implementer",
+    "reviewer",
+    "objective",
+    "acceptance_criteria",
+    "owner_decisions",
+    "references",
+    "scope",
+    "required_checks",
+    "next_gate",
+    "risk_flags",
+    "stop_conditions",
+    "freshness",
+    "handoff",
+    "handoff_is_authoritative"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "description": "Packet format version."
+    },
+    "skill": {
+      "const": "prepare-task",
+      "description": "Canonical skill that produced the packet."
+    },
+    "engineering_system_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "Pinned engineering-system version from project-state."
+    },
+    "repository": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "owner/name of the registered repository."
+    },
+    "issue_number": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Authoritative work item."
+    },
+    "acting_job": {
+      "enum": [
+        "implement-issue",
+        "review-pr"
+      ],
+      "description": "Job this packet prepares."
+    },
+    "implementer": {
+      "enum": [
+        "codex",
+        "claude-code",
+        "chatgpt",
+        "owner",
+        "local-worker"
+      ],
+      "description": "Acting role."
+    },
+    "reviewer": {
+      "enum": [
+        "codex",
+        "claude-code",
+        "chatgpt",
+        "owner",
+        "local-worker"
+      ],
+      "description": "Independent reviewing role; never equal to the implementer."
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "The work item's outcome, copied from the authoritative PDR."
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "description": "Explicit acceptance criteria; never invented and never empty.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "minItems": 1
+    },
+    "owner_decisions": {
+      "type": "array",
+      "description": "Owner decisions already settled on the work item; binding context, never re-opened by the acting agent.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pdr_issue",
+        "spec_path",
+        "spec_requirements",
+        "adr_disposition",
+        "applicable_adrs"
+      ],
+      "description": "Authoritative records this packet points at.",
+      "properties": {
+        "pdr_issue": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "description": "owner/name#number of the authoritative work item."
+        },
+        "spec_path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Canonical specification path, or null when not applicable."
+        },
+        "spec_requirements": {
+          "type": "array",
+          "description": "Requirement references from the snapshot.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "adr_disposition": {
+          "enum": [
+            "adr-not-required",
+            "adr-existing",
+            "adr-required",
+            "needs-pm-adr"
+          ],
+          "description": "ADR-0004 disposition carried from the work item."
+        },
+        "applicable_adrs": {
+          "type": "array",
+          "description": "Applicable accepted ADR identifiers.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed_paths",
+        "out_of_scope",
+        "protected_areas"
+      ],
+      "description": "Bounded context selection with explicit exclusions.",
+      "properties": {
+        "allowed_paths": {
+          "type": "array",
+          "description": "Repository-relative paths; bounded, never a repository dump.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "maxItems": 20
+        },
+        "out_of_scope": {
+          "type": "array",
+          "description": "Explicitly excluded work from the PDR.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "protected_areas": {
+          "type": "array",
+          "description": "Areas requiring approval before change.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      }
+    },
+    "required_checks": {
+      "type": "array",
+      "description": "Allowlisted verification commands from trusted configuration.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "next_gate": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "The reviewer or gate expected after this job."
+    },
+    "risk_flags": {
+      "type": "array",
+      "description": "Protected, security, cost, scope and owner-decision triggers.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "detail",
+          "routeTo"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "protected-change",
+              "security",
+              "cost",
+              "scope",
+              "owner-decision"
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "description": "Concise, non-secret description."
+          },
+          "routeTo": {
+            "enum": [
+              "needs-pm",
+              "needs-owner"
+            ]
+          }
+        }
+      }
+    },
+    "stop_conditions": {
+      "type": "array",
+      "description": "Conditions that stop the acting job.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "minItems": 1
+    },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observed_at",
+        "state_snapshot_id",
+        "source_kinds"
+      ],
+      "description": "Freshness evidence carried from the consumed snapshot.",
+      "properties": {
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "state_snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "description": "Dependency evaluation snapshot id from project-state."
+        },
+        "source_kinds": {
+          "type": "array",
+          "description": "Source kinds consulted by the snapshot.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      }
+    },
+    "handoff": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "Rendered transport for the acting adapter."
+    },
+    "handoff_is_authoritative": {
+      "const": false,
+      "description": "The handoff is never authoritative. GitHub issue/PDR, committed spec and accepted ADRs are."
+    }
+  }
+}

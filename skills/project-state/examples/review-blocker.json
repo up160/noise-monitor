@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "repository": "up160/ai-engineering-system",
+    "engineering_system_version": "0.1.9",
+    "phase": "discovery",
+    "lifecycle_state": "active",
+    "owner_set": false
+  },
+  "active_work": {
+    "issue_number": 45,
+    "title": "Enforce dependency-aware readiness",
+    "purpose": "Implement the ADR-0009 dependency gate for Ready, claim, Building and dispatch.",
+    "workflow_status": "Review",
+    "workflow_transition": "changes-requested",
+    "implementation_owner": "codex",
+      "assigned_implementer": "codex",
+      "assigned_reviewer": "claude-code"
+  },
+  "pull_request": {
+    "number": 60,
+    "head_sha": "b7c8d9e0f1a2b3c4d5e6f708192a3b4c5d6e7f80",
+      "base_sha": "bbbbbbbbf1a2b3c4d5e6f708192a3b4c5d6e7f80",
+    "state": "open",
+    "mergeable": "mergeable",
+    "checks_summary": "passing"
+  },
+  "review": {
+    "status": "changes-requested",
+    "unresolved_findings": [
+      {
+        "id": "review:60:1",
+        "severity": "blocking",
+        "summary": "Gate evaluation accepts an open prerequisite PR as completion evidence.",
+        "locator": "up160/ai-engineering-system#60 review comment 1"
+      },
+      {
+        "id": "review:60:2",
+        "severity": "should-fix",
+        "summary": "Blocker identifiers are not stable across repeated evaluations.",
+        "locator": "up160/ai-engineering-system#60 review comment 2"
+      },
+      {
+        "id": "review:60:3",
+        "severity": "suggestion",
+        "summary": "Extract the reason-code list into a named constant.",
+        "locator": "up160/ai-engineering-system#60 review comment 3"
+      }
+    ]
+  },
+  "checks": {
+    "status": "passing",
+    "entries": [
+      {
+        "name": "Orchestrator tests",
+        "status": "success",
+        "detail": "npm test completed with no failing assertions"
+      },
+      {
+        "name": "Markdown lint",
+        "status": "success",
+        "detail": "markdownlint-cli2 reported no violations"
+      }
+    ]
+  },
+  "dependencies": {
+    "action": "claim",
+    "state": "satisfied",
+    "eligible": true,
+    "route_to_pm": false,
+    "blocker_ids": [],
+    "reason_codes": [],
+    "blockers": [],
+    "snapshot_id": "9a8b7c6d5e4f30211203f4e5d6c7b8a99a8b7c6d",
+    "observed_at": "2026-09-02T09:20:00Z"
+  },
+  "specification": {
+    "path": "docs/spec.md",
+    "requirement_refs": [
+      "R16"
+    ],
+    "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+    "state": "fresh"
+  },
+  "adr": {
+    "disposition": "adr-existing",
+    "applicable_adrs": [
+      "ADR-0009"
+    ],
+    "reason": null
+  },
+  "security_flags": [],
+  "next_expected": {
+    "workflow_status": "Review",
+    "workflow_transition": "changes-requested",
+    "action": "Codex resolves the blocking and should-fix findings on PR #60, then requests re-review."
+  },
+  "owner_action_required": false,
+  "owner_action": null,
+  "freshness": {
+    "observed_at": "2026-09-02T09:20:04Z",
+    "sources": [
+      {
+        "kind": "project-config",
+        "locator": ".ai/project.yml",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-issue",
+        "locator": "up160/ai-engineering-system#45",
+        "revision": null,
+        "updated_at": "2026-09-02T09:05:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-pull-request",
+        "locator": "up160/ai-engineering-system#60",
+        "revision": "b7c8d9e0f1a2b3c4d5e6f708192a3b4c5d6e7f80",
+        "updated_at": "2026-09-02T09:18:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-review",
+        "locator": "up160/ai-engineering-system#60 reviews",
+        "revision": null,
+        "updated_at": "2026-09-02T09:19:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-checks",
+        "locator": "up160/ai-engineering-system@b7c8d9e0f1a2b3c4d5e6f708192a3b4c5d6e7f80",
+        "revision": "b7c8d9e0f1a2b3c4d5e6f708192a3b4c5d6e7f80",
+        "updated_at": "2026-09-02T09:19:30Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "dependency-gate",
+        "locator": "dependency-evaluation:9a8b7c6d5e4f30211203f4e5d6c7b8a99a8b7c6d",
+        "revision": "9a8b7c6d5e4f30211203f4e5d6c7b8a99a8b7c6d",
+        "updated_at": "2026-09-02T09:20:00Z",
+        "state": "fresh"
+      }
+    ]
+  },
+  "conflicts": []
+}

@@ -1,0 +1,13 @@
+{
+  "name": "noise-monitor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Analyses per-second sound-level readings into music sessions and a noise report.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}

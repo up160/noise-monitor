@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "planning_tier": "small-feature",
+  "problem": "The shipping-region filter was agreed for a single selected region, but owners buy across two regions and cannot express that.",
+  "outcome": "An owner filters listings by one or more shipping regions, so cross-region buying is expressible in one search.",
+  "scope": [
+    "Show shipping regions on each result card.",
+    "Filter results by one or more selected shipping regions."
+  ],
+  "out_of_scope": [
+    "Shipping cost estimation.",
+    "Customs or duty calculation.",
+    "Saved region presets."
+  ],
+  "requirements": [
+    "Each result card displays the seller's declared shipping regions.",
+    "The region filter accepts multiple regions and matches any selected region.",
+    "A listing with no declared regions is shown as unknown rather than excluded."
+  ],
+  "acceptance_criteria": [
+    "Selecting two regions returns listings shipping to either region.",
+    "Clearing the filter restores the unfiltered result set.",
+    "A listing with no declared regions renders as unknown and remains visible."
+  ],
+  "dependencies": {
+    "hard": [],
+    "gates": [],
+    "ordering": [128]
+  },
+  "adr_disposition": {
+    "kind": "adr-not-required",
+    "reason": "Filter semantics change only; no new component, store or trust boundary."
+  },
+  "owner_decisions": [
+    "Multi-region selection matches any selected region rather than all of them.",
+    "Saved region presets remain out of scope for this work item."
+  ],
+  "revision": {
+    "reason": "Later owner discussion materially changed the filter from a single region to multiple regions.",
+    "changed_requirements": [
+      "The region filter accepts multiple regions and matches any selected region, replacing the agreed single-region filter."
+    ],
+    "github_updated_before_resume": true
+  },
+  "unresolved": [
+    {
+      "topic": "Whether region selection should persist between sessions.",
+      "material": false,
+      "escalation": "needs-owner"
+    }
+  ],
+  "writable_paths": [
+    "src/search/results",
+    "src/search/filters"
+  ],
+  "github": {
+    "repo": "up160/find-my-booster",
+    "issue_number": 128,
+    "issue_is_canonical": true
+  },
+  "source": {
+    "kind": "owner-conversation",
+    "authoritative": false,
+    "summary": "Follow-up conversation changed the agreed requirement; the issue and PDR were updated before implementation resumed."
+  }
+}

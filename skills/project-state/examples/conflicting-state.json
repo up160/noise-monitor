@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "repository": "up160/ai-engineering-system",
+    "engineering_system_version": "0.1.9",
+    "phase": "discovery",
+    "lifecycle_state": "active",
+    "owner_set": false
+  },
+  "active_work": {
+    "issue_number": 42,
+    "title": "Implement canonical implement-issue skill",
+    "purpose": "Define the bounded implementation procedure for the primary engineer.",
+    "workflow_status": "Blocked",
+    "workflow_transition": "blocked",
+    "implementation_owner": "unknown",
+      "assigned_implementer": "codex",
+      "assigned_reviewer": "claude-code"
+  },
+  "pull_request": null,
+  "review": {
+    "status": "not-started",
+    "unresolved_findings": []
+  },
+  "checks": {
+    "status": "none",
+    "entries": []
+  },
+  "dependencies": {
+    "action": "claim",
+    "state": "conflicting",
+    "eligible": false,
+    "route_to_pm": true,
+    "blocker_ids": [
+      "dependency:graph-conflict"
+    ],
+    "reason_codes": [
+      "conflicting"
+    ],
+    "blockers": [
+      {
+        "id": "dependency:graph-conflict",
+        "reason_code": "conflicting",
+        "detail": "issue declares [41], portfolio declares [39, 41]",
+        "route_to_pm": true,
+        "escalation": "needs-pm"
+      }
+    ],
+    "snapshot_id": "4f30211203d5e6f7c6d9a8b7b8a99a8b4f302112",
+    "observed_at": "2026-09-02T09:40:00Z"
+  },
+  "specification": {
+    "path": "docs/spec.md",
+    "requirement_refs": [
+      "R16",
+      "R17"
+    ],
+    "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+    "state": "conflicting"
+  },
+  "adr": {
+    "disposition": "adr-existing",
+    "applicable_adrs": [
+      "ADR-0005"
+    ],
+    "reason": null
+  },
+  "security_flags": [],
+  "next_expected": {
+    "workflow_status": "Blocked",
+    "workflow_transition": "blocked",
+    "action": "ChatGPT reconciles the issue and portfolio dependency declarations for issue #42."
+  },
+  "owner_action_required": false,
+  "owner_action": null,
+  "freshness": {
+    "observed_at": "2026-09-02T09:40:06Z",
+    "sources": [
+      {
+        "kind": "project-config",
+        "locator": ".ai/project.yml",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-issue",
+        "locator": "up160/ai-engineering-system#42",
+        "revision": null,
+        "updated_at": "2026-09-02T09:08:00Z",
+        "state": "conflicting"
+      },
+      {
+        "kind": "github-pull-request",
+        "locator": "up160/ai-engineering-system#42 linked pull requests",
+        "revision": null,
+        "updated_at": null,
+        "state": "missing"
+      },
+      {
+        "kind": "specification",
+        "locator": "docs/DEPENDENCY_GRAPH.md",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "conflicting"
+      },
+      {
+        "kind": "github-project",
+        "locator": "up160 project 1 / Status",
+        "revision": null,
+        "updated_at": "2026-09-02T09:39:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "dependency-gate",
+        "locator": "dependency-evaluation:4f30211203d5e6f7c6d9a8b7b8a99a8b4f302112",
+        "revision": "4f30211203d5e6f7c6d9a8b7b8a99a8b4f302112",
+        "updated_at": "2026-09-02T09:40:00Z",
+        "state": "conflicting"
+      }
+    ]
+  },
+  "conflicts": [
+    {
+      "id": "dependency:graph-conflict",
+      "detail": "Issue #42 declares hard dependency #41 while the portfolio graph declares #39 and #41.",
+      "sources": [
+        "up160/ai-engineering-system#42",
+        "docs/DEPENDENCY_GRAPH.md"
+      ],
+      "routes_to": "needs-pm"
+    }
+  ]
+}

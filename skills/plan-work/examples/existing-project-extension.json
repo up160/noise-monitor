@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "planning_tier": "small-feature",
+  "problem": "The dependency gate reports blocker identifiers but the issue thread does not show which refreshed snapshot produced them, so a blocked item is re-investigated by hand.",
+  "outcome": "A blocked work item records the snapshot identifier alongside its blocker reason codes, so the owner can see which refreshed GitHub truth produced the decision.",
+  "scope": [
+    "Include the evaluation snapshot identifier in the durable blocker audit record."
+  ],
+  "out_of_scope": [
+    "Changing dependency semantics or blocker reason codes.",
+    "Storing evaluation history outside GitHub."
+  ],
+  "requirements": [
+    "The blocker audit record includes the snapshot identifier of the evaluation that produced it.",
+    "Repeated evaluation of unchanged state remains idempotent."
+  ],
+  "acceptance_criteria": [
+    "A blocked evaluation writes the snapshot identifier with its reason codes.",
+    "Re-evaluating unchanged state does not create a duplicate audit record."
+  ],
+  "dependencies": {
+    "hard": [
+      { "kind": "issue", "number": 45 }
+    ],
+    "gates": [],
+    "ordering": [40]
+  },
+  "adr_disposition": {
+    "kind": "adr-existing",
+    "adr_references": ["ADR-0009", "ADR-0001"],
+    "reason": "Extends the accepted dependency-aware readiness decision and keeps GitHub authoritative."
+  },
+  "owner_decisions": [
+    "Audit records stay in GitHub; no local evaluation store is introduced."
+  ],
+  "project_state_refs": [
+    "docs/DEPENDENCY_GRAPH.md",
+    "issue #45",
+    "GitHub Project status: Blocked"
+  ],
+  "writable_paths": [
+    "orchestrator/src",
+    "orchestrator/test"
+  ],
+  "github": {
+    "repo": "up160/ai-engineering-system",
+    "issue_number": 73,
+    "issue_is_canonical": true
+  },
+  "source": {
+    "kind": "existing-issue-thread",
+    "authoritative": false,
+    "summary": "Extension of an existing project; planned against refreshed GitHub state and the accepted ADRs."
+  }
+}

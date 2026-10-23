@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "planning_tier": "tiny-fix",
+  "outcome": "The README states the current draft version so a new project pins the right engineering-system release.",
+  "acceptance_criteria": [
+    "README.md records the same version as skills/registry.json.",
+    "The version parity test passes."
+  ],
+  "adr_disposition": {
+    "kind": "adr-not-required",
+    "reason": "Documentation correction that introduces no architectural decision."
+  },
+  "writable_paths": [
+    "README.md"
+  ],
+  "github": {
+    "repo": "up160/ai-engineering-system",
+    "issue_number": 71,
+    "issue_is_canonical": true
+  },
+  "source": {
+    "kind": "owner-request",
+    "authoritative": false
+  }
+}

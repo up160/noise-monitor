@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "repository": "up160/ai-engineering-system-dummy",
+    "engineering_system_version": "0.1.9",
+    "phase": "mature",
+    "lifecycle_state": "archived",
+    "owner_set": true
+  },
+  "active_work": null,
+  "pull_request": null,
+  "review": {
+    "status": "not-applicable",
+    "unresolved_findings": []
+  },
+  "checks": {
+    "status": "none",
+    "entries": []
+  },
+  "dependencies": {
+    "action": "claim",
+    "state": "unknown",
+    "eligible": false,
+    "route_to_pm": false,
+    "blocker_ids": [
+      "project:archived"
+    ],
+    "reason_codes": [
+      "unknown"
+    ],
+    "blockers": [
+      {
+        "id": "project:archived",
+        "reason_code": "unknown",
+        "detail": "no active issue is in scope because the owner archived this project",
+        "route_to_pm": false,
+        "escalation": null
+      }
+    ],
+    "snapshot_id": "6a798809981f2e3d4c5b6ac5d43d4c5b6a798809",
+    "observed_at": "2026-09-02T09:45:00Z"
+  },
+  "specification": {
+    "path": "docs/spec.md",
+    "requirement_refs": [],
+    "revision": "8f7e6d5c4b3a29180716253443f2e1d08f7e6d5c",
+    "state": "fresh"
+  },
+  "adr": {
+    "disposition": "adr-not-required",
+    "applicable_adrs": [],
+    "reason": "No active work item is in scope for an archived project."
+  },
+  "security_flags": [],
+  "next_expected": {
+    "workflow_status": "unknown",
+    "workflow_transition": "unknown",
+    "action": "No automated action; the owner must reactivate the project before work resumes."
+  },
+  "owner_action_required": false,
+  "owner_action": null,
+  "freshness": {
+    "observed_at": "2026-09-02T09:45:02Z",
+    "sources": [
+      {
+        "kind": "project-config",
+        "locator": ".ai/project.yml",
+        "revision": "8f7e6d5c4b3a29180716253443f2e1d08f7e6d5c",
+        "updated_at": "2026-08-30T11:20:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-issue",
+        "locator": "up160/ai-engineering-system-dummy open issues",
+        "revision": null,
+        "updated_at": null,
+        "state": "missing"
+      },
+      {
+        "kind": "github-pull-request",
+        "locator": "up160/ai-engineering-system-dummy open pull requests",
+        "revision": null,
+        "updated_at": null,
+        "state": "missing"
+      },
+      {
+        "kind": "github-project",
+        "locator": "up160 project 1 / Status",
+        "revision": null,
+        "updated_at": "2026-08-30T11:22:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "release",
+        "locator": "up160/ai-engineering-system-dummy releases/tag/v1.0.0",
+        "revision": "8f7e6d5c4b3a29180716253443f2e1d08f7e6d5c",
+        "updated_at": "2026-08-30T11:18:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "dependency-gate",
+        "locator": "dependency-evaluation:6a798809981f2e3d4c5b6ac5d43d4c5b6a798809",
+        "revision": "6a798809981f2e3d4c5b6ac5d43d4c5b6a798809",
+        "updated_at": "2026-09-02T09:45:00Z",
+        "state": "fresh"
+      }
+    ]
+  },
+  "conflicts": []
+}

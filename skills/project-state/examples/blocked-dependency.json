@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "repository": "up160/ai-engineering-system",
+    "engineering_system_version": "0.1.9",
+    "phase": "discovery",
+    "lifecycle_state": "active",
+    "owner_set": false
+  },
+  "active_work": {
+    "issue_number": 41,
+    "title": "Implement canonical prepare-task skill",
+    "purpose": "Package an authoritative implementation task from refreshed project truth.",
+    "workflow_status": "Blocked",
+    "workflow_transition": "blocked",
+    "implementation_owner": "codex",
+      "assigned_implementer": "codex",
+      "assigned_reviewer": "claude-code"
+  },
+  "pull_request": null,
+  "review": {
+    "status": "not-started",
+    "unresolved_findings": []
+  },
+  "checks": {
+    "status": "none",
+    "entries": []
+  },
+  "dependencies": {
+    "action": "claim",
+    "state": "blocked-open-issue",
+    "eligible": false,
+    "route_to_pm": false,
+    "blocker_ids": [
+      "issue:40",
+      "issue:56"
+    ],
+    "reason_codes": [
+      "blocked-open-issue"
+    ],
+    "blockers": [
+      {
+        "id": "issue:40",
+        "reason_code": "blocked-open-issue",
+        "detail": "required issue #40 is open",
+        "route_to_pm": false,
+        "escalation": null
+      },
+      {
+        "id": "issue:56",
+        "reason_code": "blocked-open-issue",
+        "detail": "required issue #56 is open",
+        "route_to_pm": false,
+        "escalation": null
+      }
+    ],
+    "snapshot_id": "1f2e3d4c5b6a79880998a7b6c5d4e3f21f2e3d4c",
+    "observed_at": "2026-09-02T09:25:00Z"
+  },
+  "specification": {
+    "path": "docs/spec.md",
+    "requirement_refs": [
+      "R16",
+      "R17"
+    ],
+    "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+    "state": "fresh"
+  },
+  "adr": {
+    "disposition": "adr-existing",
+    "applicable_adrs": [
+      "ADR-0005",
+      "ADR-0009"
+    ],
+    "reason": null
+  },
+  "security_flags": [],
+  "next_expected": {
+    "workflow_status": "Blocked",
+    "workflow_transition": "blocked",
+    "action": "Wait for issues #40 and #56 to close with their required gates before Ready."
+  },
+  "owner_action_required": false,
+  "owner_action": null,
+  "freshness": {
+    "observed_at": "2026-09-02T09:25:03Z",
+    "sources": [
+      {
+        "kind": "project-config",
+        "locator": ".ai/project.yml",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-issue",
+        "locator": "up160/ai-engineering-system#41",
+        "revision": null,
+        "updated_at": "2026-09-02T09:06:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-pull-request",
+        "locator": "up160/ai-engineering-system#41 linked pull requests",
+        "revision": null,
+        "updated_at": "2026-09-02T09:24:00Z",
+        "state": "missing"
+      },
+      {
+        "kind": "github-project",
+        "locator": "up160 project 1 / Status",
+        "revision": null,
+        "updated_at": "2026-09-02T09:24:30Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "dependency-gate",
+        "locator": "dependency-evaluation:1f2e3d4c5b6a79880998a7b6c5d4e3f21f2e3d4c",
+        "revision": "1f2e3d4c5b6a79880998a7b6c5d4e3f21f2e3d4c",
+        "updated_at": "2026-09-02T09:25:00Z",
+        "state": "fresh"
+      }
+    ]
+  },
+  "conflicts": []
+}

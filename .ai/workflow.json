@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "authority": "github-project-v2",
+  "projectOwner": "up160",
+  "projectNumber": 1,
+  "projectTitle": "AI Engineering Delivery",
+  "fields": {
+    "status": {
+      "name": "Status",
+      "values": [
+        "Backlog",
+        "Ready",
+        "Building",
+        "Review",
+        "PM Gate",
+        "Deploying",
+        "Done",
+        "Blocked"
+      ]
+    }
+  },
+  "transitionStatus": {
+    "planned": "Backlog",
+    "ready-for-build": "Ready",
+    "building": "Building",
+    "ready-for-review": "Review",
+    "changes-requested": "Review",
+    "ready-for-pm": "PM Gate",
+    "mergeable": "PM Gate",
+    "deploying": "Deploying",
+    "done": "Done",
+    "blocked": "Blocked"
+  },
+  "administrativePause": {
+    "configPath": ".ai/project.yml",
+    "key": "paused",
+    "pausedValue": true
+  },
+  "escalations": {
+    "needs-pm": {
+      "label": "needs-pm",
+      "status": "Blocked"
+    },
+    "needs-owner": {
+      "label": "needs-owner",
+      "status": "Blocked"
+    }
+  },
+  "notifications": {
+    "normalTransitionsNotifyOwner": false
+  },
+  "dependencies": {
+    "directSource": "github-issue",
+    "portfolioSource": "docs/DEPENDENCY_GRAPH.md",
+    "conflictStatus": "Blocked",
+    "conflictEscalation": "needs-pm"
+  }
+}

@@ -1,0 +1,19 @@
+engineering_system_version: "0.1.29"
+phase: "discovery"
+paused: false
+stack_profile: "automation-script"
+orchestration:
+  enabled: true
+  runner: "local-macos"
+  target_extra_monthly_cost_gbp: 0
+  max_extra_monthly_cost_gbp: 5
+security:
+  inbound_network_required: false
+# How this project deploys and proves production health. Each command must also be admitted,
+# exactly, by a literal-only rule in the committed permission policy. Use `deploy: none` for a
+# project with nothing to deploy: work is then Done once merged with green checks.
+deploy: none
+# deploy:
+#   command: ["npm", "run", "deploy"]
+#   verify: ["curl", "-fsS", "https://example.test/health"]
+#   rollback: redeploy-previous

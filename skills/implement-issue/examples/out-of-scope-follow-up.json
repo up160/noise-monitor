@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "skill": "implement-issue",
+  "engineering_system_version": "0.1.12",
+  "repository": "up160/ai-engineering-system",
+  "issue_number": 45,
+  "branch": "issue-45-dependency-aware-ready-claim-gate",
+  "pull_request": 60,
+  "head_sha": "dacf7861f2e3d4c5b6a7908172635445e6f7a8b9",
+  "acceptance_evidence": [
+    {
+      "criterion": "Ready, claim, Building and worker dispatch each require refreshed dependency evidence.",
+      "evidence": "orchestrator/test/dependency-gate.test.ts asserts action-scoped evaluation for all four protected actions.",
+      "satisfied": true
+    }
+  ],
+  "checks": [
+    {
+      "command": "npm --prefix orchestrator test",
+      "status": "passed",
+      "detail": "78 tests, 0 failures"
+    }
+  ],
+  "changes": [
+    {
+      "path": "orchestrator/src/dependency-gate.ts",
+      "summary": "Action-scoped readiness evaluation with deterministic blocker identifiers."
+    }
+  ],
+  "deviations": [
+    "Blocker identifiers are content-hashed rather than sequential so restarts stay idempotent; the issue did not specify a scheme."
+  ],
+  "risks": [],
+  "follow_ups": [
+    {
+      "issue_number": 46,
+      "title": "The portfolio reporter re-derives dependency state instead of reading the gate's snapshot",
+      "reason": "valid out-of-scope discovery raised separately instead of widening this pull request"
+    }
+  ],
+  "adr": {
+    "disposition": "adr-existing",
+    "references": [
+      "ADR-0009"
+    ]
+  },
+  "next_job": "review-pr",
+  "self_review_permitted": false
+}

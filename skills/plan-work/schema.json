@@ -1,0 +1,450 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/up160/ai-engineering-system/skills/plan-work/schema.json",
+  "title": "Product Requirements Record (PDR)",
+  "description": "Tier-proportionate requirements record for one GitHub work item. The GitHub issue body is the canonical PDR for normal work; the originating conversation is non-authoritative provenance only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "planning_tier",
+    "outcome",
+    "acceptance_criteria",
+    "adr_disposition",
+    "github",
+    "source"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "planning_tier": {
+      "description": "Playbook planning tier driving how much of this record is required.",
+      "enum": [
+        "tiny-fix",
+        "small-feature",
+        "major-feature",
+        "new-project"
+      ]
+    },
+    "problem": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "outcome": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "intended_user_value": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "scope": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "out_of_scope": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "risks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "dependencies": {
+      "description": "Declared relationships using the dependency-gate vocabulary. Ordering links do not block readiness.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hard",
+        "gates",
+        "ordering"
+      ],
+      "properties": {
+        "hard": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "number"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "issue",
+                  "pr"
+                ]
+              },
+              "number": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        "gates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "name",
+              "action"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "owner",
+                  "pm",
+                  "security",
+                  "release",
+                  "cost"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._-]*$"
+              },
+              "action": {
+                "enum": [
+                  "ready",
+                  "claim",
+                  "building",
+                  "dispatch",
+                  "all"
+                ]
+              }
+            }
+          }
+        },
+        "ordering": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "adr_disposition": {
+      "description": "Exactly one ADR-0004 disposition for this work item.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "adr-not-required",
+            "adr-existing",
+            "adr-required",
+            "needs-pm-adr"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^\\n\\r\\u2028\\u2029]*\\S[^\\n\\r\\u2028\\u2029]*$",
+          "description": "Single-line rationale. ADR-0004 requires it for adr-not-required. It is written onto one line of the authoritative GitHub issue, so line terminators are not permitted."
+        },
+        "adr_references": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ADR-\\d{4}$"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "adr-not-required"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "reason"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "adr-existing",
+                  "adr-required"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "adr_references"
+            ],
+            "properties": {
+              "adr_references": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "owner_decisions": {
+      "description": "Owner decisions that materially shaped scope.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "spec_references": {
+      "description": "Canonical docs/spec.md sections this work item implements or updates.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "writable_paths": {
+      "description": "Repository-relative paths the implementation may change. The authoritative source of a job's write scope: a task packet's allowed_paths become the agent's writable roots, so they are declared here by the planning role rather than chosen by the job itself. Read-only context belongs in spec_references.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$)).*\\S"
+      }
+    },
+    "project_state_refs": {
+      "description": "Refreshed authoritative GitHub project state consulted while planning against an existing project.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "revision": {
+      "description": "Recorded when later discussion materially changes requirements. GitHub must be updated before implementation resumes.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reason",
+        "changed_requirements",
+        "github_updated_before_resume"
+      ],
+      "properties": {
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "changed_requirements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "github_updated_before_resume": {
+          "const": true
+        }
+      }
+    },
+    "unresolved": {
+      "description": "Fail-closed record of requirements that are not resolved. A material entry makes the record ineligible for Ready.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "topic",
+          "material",
+          "escalation"
+        ],
+        "properties": {
+          "topic": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "material": {
+            "type": "boolean"
+          },
+          "escalation": {
+            "enum": [
+              "needs-pm",
+              "needs-owner",
+              "needs-pm-adr"
+            ]
+          }
+        }
+      }
+    },
+    "github": {
+      "description": "The authoritative GitHub work item carrying this record.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repo",
+        "issue_number",
+        "issue_is_canonical"
+      ],
+      "properties": {
+        "repo": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]+/[A-Za-z0-9._-]+$"
+        },
+        "issue_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "issue_is_canonical": {
+          "const": true
+        }
+      }
+    },
+    "source": {
+      "description": "Non-authoritative provenance for the record. Chat is transport, never project state.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "authoritative"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "owner-conversation",
+            "owner-request",
+            "existing-issue-thread"
+          ]
+        },
+        "authoritative": {
+          "const": false
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "planning_tier": {
+            "enum": [
+              "small-feature",
+              "major-feature",
+              "new-project"
+            ]
+          }
+        },
+        "required": [
+          "planning_tier"
+        ]
+      },
+      "then": {
+        "required": [
+          "problem",
+          "scope",
+          "out_of_scope",
+          "requirements",
+          "dependencies"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "planning_tier": {
+            "enum": [
+              "major-feature",
+              "new-project"
+            ]
+          }
+        },
+        "required": [
+          "planning_tier"
+        ]
+      },
+      "then": {
+        "required": [
+          "intended_user_value",
+          "constraints",
+          "risks",
+          "spec_references"
+        ]
+      }
+    }
+  ]
+}

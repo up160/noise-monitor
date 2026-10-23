@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "planning_tier": "small-feature",
+  "problem": "Owners cannot tell from a booster listing whether a seller ships internationally, so they open every listing to find out.",
+  "outcome": "A listing shows its shipping regions in the results list, so an owner filters out unusable listings without opening them.",
+  "scope": [
+    "Show shipping regions on each result card.",
+    "Filter results by a selected shipping region."
+  ],
+  "out_of_scope": [
+    "Shipping cost estimation.",
+    "Customs or duty calculation."
+  ],
+  "requirements": [
+    "Each result card displays the seller's declared shipping regions.",
+    "A region filter narrows results to sellers shipping to that region.",
+    "A listing with no declared regions is shown as unknown rather than excluded."
+  ],
+  "acceptance_criteria": [
+    "A result card renders the declared shipping regions.",
+    "Selecting a region excludes listings that do not ship there.",
+    "A listing with no declared regions renders as unknown and remains visible."
+  ],
+  "dependencies": {
+    "hard": [],
+    "gates": [],
+    "ordering": []
+  },
+  "adr_disposition": {
+    "kind": "adr-not-required",
+    "reason": "Presentation and filtering over existing listing data; no new component, store or trust boundary."
+  },
+  "owner_decisions": [
+    "Unknown shipping regions stay visible rather than being hidden by default."
+  ],
+  "writable_paths": [
+    "src/search/results",
+    "src/search/filters"
+  ],
+  "github": {
+    "repo": "up160/find-my-booster",
+    "issue_number": 128,
+    "issue_is_canonical": true
+  },
+  "source": {
+    "kind": "owner-conversation",
+    "authoritative": false,
+    "summary": "Owner asked for shipping visibility in results; scope agreed as display plus filter only."
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "repository": "up160/ai-engineering-system",
+    "engineering_system_version": "0.1.9",
+    "phase": "discovery",
+    "lifecycle_state": "unknown",
+    "owner_set": false
+  },
+  "active_work": {
+    "issue_number": 56,
+    "title": "Implement canonical plan-work skill",
+    "purpose": "Define the planning and Product Requirements Record procedure.",
+    "workflow_status": "unknown",
+    "workflow_transition": "unknown",
+    "implementation_owner": "unknown",
+      "assigned_implementer": "codex",
+      "assigned_reviewer": "claude-code"
+  },
+  "pull_request": null,
+  "review": {
+    "status": "unknown",
+    "unresolved_findings": []
+  },
+  "checks": {
+    "status": "unknown",
+    "entries": []
+  },
+  "dependencies": {
+    "action": "claim",
+    "state": "unknown",
+    "eligible": false,
+    "route_to_pm": true,
+    "blocker_ids": [
+      "dependency:refresh"
+    ],
+    "reason_codes": [
+      "unknown"
+    ],
+    "blockers": [
+      {
+        "id": "dependency:refresh",
+        "reason_code": "unknown",
+        "detail": "dependency evaluation could not be refreshed; the last snapshot is older than the issue update",
+        "route_to_pm": true,
+        "escalation": "needs-pm"
+      }
+    ],
+    "snapshot_id": "7c6d5e4f302112039a8b7c6dd6c7b8a97c6d5e4f",
+    "observed_at": "2026-09-01T21:40:00Z"
+  },
+  "specification": {
+    "path": "docs/spec.md",
+    "requirement_refs": [
+      "R17"
+    ],
+    "revision": null,
+    "state": "stale"
+  },
+  "adr": {
+    "disposition": "unknown",
+    "applicable_adrs": [],
+    "reason": null
+  },
+  "security_flags": [],
+  "next_expected": {
+    "workflow_status": "unknown",
+    "workflow_transition": "unknown",
+    "action": "Refresh GitHub project truth before any further automated action on issue #56."
+  },
+  "owner_action_required": false,
+  "owner_action": null,
+  "freshness": {
+    "observed_at": "2026-09-02T09:35:00Z",
+    "sources": [
+      {
+        "kind": "project-config",
+        "locator": ".ai/project.yml",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "specification",
+        "locator": "docs/spec.md",
+        "revision": null,
+        "updated_at": null,
+        "state": "stale"
+      },
+      {
+        "kind": "github-issue",
+        "locator": "up160/ai-engineering-system#56",
+        "revision": null,
+        "updated_at": "2026-09-01T21:38:00Z",
+        "state": "stale"
+      },
+      {
+        "kind": "github-pull-request",
+        "locator": "up160/ai-engineering-system#56 linked pull requests",
+        "revision": null,
+        "updated_at": null,
+        "state": "missing"
+      },
+      {
+        "kind": "github-project",
+        "locator": "up160 project 1 / Status",
+        "revision": null,
+        "updated_at": null,
+        "state": "missing"
+      },
+      {
+        "kind": "github-checks",
+        "locator": "up160/ai-engineering-system#56 linked checks",
+        "revision": null,
+        "updated_at": null,
+        "state": "missing"
+      },
+      {
+        "kind": "dependency-gate",
+        "locator": "dependency-evaluation:7c6d5e4f302112039a8b7c6dd6c7b8a97c6d5e4f",
+        "revision": "7c6d5e4f302112039a8b7c6dd6c7b8a97c6d5e4f",
+        "updated_at": "2026-09-01T21:40:00Z",
+        "state": "stale"
+      }
+    ]
+  },
+  "conflicts": []
+}

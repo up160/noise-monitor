@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://up160.github.io/ai-engineering-system/skills/implement-issue/schema.json",
+  "title": "implement-issue delivery report",
+  "description": "Evidence produced by delivering one bounded work item from a validated prepare-task packet, handed to an independent reviewer.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "skill",
+    "engineering_system_version",
+    "repository",
+    "issue_number",
+    "branch",
+    "pull_request",
+    "head_sha",
+    "acceptance_evidence",
+    "checks",
+    "changes",
+    "deviations",
+    "risks",
+    "follow_ups",
+    "adr",
+    "next_job",
+    "self_review_permitted"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "description": "Report format version."
+    },
+    "skill": {
+      "const": "implement-issue",
+      "description": "Canonical skill that produced the report."
+    },
+    "engineering_system_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "Pinned engineering-system version carried from the packet."
+    },
+    "repository": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "owner/name of the registered repository."
+    },
+    "issue_number": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The authoritative work item delivered."
+    },
+    "branch": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "The bounded issue branch the change was delivered on."
+    },
+    "pull_request": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Pull request opened or updated for this work item."
+    },
+    "head_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "Exact head SHA the review must be pinned to."
+    },
+    "acceptance_evidence": {
+      "type": "array",
+      "description": "One entry per acceptance criterion; evidence is the primary completion yardstick and is never assumed.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["criterion", "evidence", "satisfied"],
+        "properties": {
+          "criterion": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "description": "The acceptance criterion, copied from the packet."
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "description": "Concrete, locatable evidence that the criterion is met."
+          },
+          "satisfied": {
+            "const": true,
+            "description": "A delivered report contains only proven criteria; an unproven one blocks delivery."
+          }
+        }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "description": "Required checks from the packet's trusted configuration and their exact results.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["command", "status", "detail"],
+        "properties": {
+          "command": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "status": {
+            "const": "passed",
+            "description": "A delivered report contains only passing checks; failed or not-run checks block delivery."
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "description": "Concise, non-secret result evidence."
+          }
+        }
+      }
+    },
+    "changes": {
+      "type": "array",
+      "description": "Change summary; every path lies inside the packet's allowed scope.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "summary"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      }
+    },
+    "deviations": {
+      "type": "array",
+      "description": "Deviations from the packet, stated explicitly. Empty means none; it is rendered as `none`.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "risks": {
+      "type": "array",
+      "description": "Residual risks the reviewer should weigh.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "follow_ups": {
+      "type": "array",
+      "description": "Separate issues raised for valid out-of-scope discoveries instead of widening this pull request.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["issue_number", "title", "reason"],
+        "properties": {
+          "issue_number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      }
+    },
+    "adr": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disposition", "references"],
+      "description": "ADR disposition carried from the packet and the decisions relied upon.",
+      "properties": {
+        "disposition": {
+          "enum": [
+            "adr-not-required",
+            "adr-existing",
+            "adr-required",
+            "needs-pm-adr"
+          ]
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      }
+    },
+    "next_job": {
+      "const": "review-pr",
+      "description": "Independent review is always the next expected job."
+    },
+    "self_review_permitted": {
+      "const": false,
+      "description": "The implementer can never mark its own work reviewed, approved or merged."
+    }
+  }
+}

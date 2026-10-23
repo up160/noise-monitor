@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "engineeringSystemVersion": "0.1.29",
+  "canonicalRoot": "skills",
+  "projectExtensionRoot": ".ai/skills",
+  "skills": [
+    {
+      "name": "project-state",
+      "path": "skills/project-state/SKILL.md",
+      "outputSchema": "skills/project-state/schema.json"
+    },
+    {
+      "name": "plan-work",
+      "path": "skills/plan-work/SKILL.md",
+      "outputSchema": "skills/plan-work/schema.json"
+    },
+    {
+      "name": "prepare-task",
+      "path": "skills/prepare-task/SKILL.md",
+      "outputSchema": "skills/prepare-task/schema.json"
+    },
+    {
+      "name": "implement-issue",
+      "path": "skills/implement-issue/SKILL.md",
+      "outputSchema": "skills/implement-issue/schema.json"
+    },
+    {
+      "name": "review-pr",
+      "path": "skills/review-pr/SKILL.md",
+      "outputSchema": "skills/review-pr/schema.json"
+    }
+  ]
+}

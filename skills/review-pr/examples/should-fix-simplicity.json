@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "skill": "review-pr",
+  "engineering_system_version": "0.1.13",
+  "repository": "up160/ai-engineering-system",
+  "issue_number": 41,
+  "pull_request": 64,
+  "head_sha": "d6f38650a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "references": {
+    "pdr_issue": "up160/ai-engineering-system#41",
+    "spec_path": "docs/spec.md",
+    "spec_requirements": ["R18"],
+    "adr_disposition": "adr-existing",
+    "applicable_adrs": ["ADR-0005"]
+  },
+  "findings": [
+    {
+      "id": "sf-1",
+      "severity": "should-fix",
+      "area": "simplicity",
+      "summary": "the adapter re-implements bounded path selection instead of reading the packet's scope",
+      "evidence": "a second selection routine drifts from the packet contract as soon as either changes",
+      "locator": "orchestrator/src/adapters/contracts.ts:88"
+    },
+    {
+      "id": "oos-1",
+      "severity": "out-of-scope",
+      "area": "scope",
+      "summary": "the portfolio reporter could consume the same snapshot instead of re-deriving it",
+      "evidence": "observed while reading the diff; not required by this issue",
+      "locator": "orchestrator/src/registry.ts:12"
+    }
+  ],
+  "acceptance_concerns": [],
+  "check_concerns": [],
+  "security_concerns": [],
+  "architecture_conformance": {
+    "conforms": true,
+    "undocumented_decisions": [],
+    "detail": "change conforms to adr-existing and records no undecided architecture"
+  },
+  "unresolved_blockers": [
+    {
+      "id": "sf-1",
+      "fingerprint": "2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90a1b",
+      "severity": "should-fix",
+      "summary": "the adapter re-implements bounded path selection instead of reading the packet's scope"
+    }
+  ],
+  "result": "should-fix-findings",
+  "next_action": "codex addresses the unresolved findings and pushes a new head",
+  "next_owner": "codex",
+  "fixes_applied": false,
+  "reviewer_may_approve_own_work": false
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "skill": "review-pr",
+  "engineering_system_version": "0.1.13",
+  "repository": "up160/ai-engineering-system",
+  "issue_number": 40,
+  "pull_request": 62,
+  "head_sha": "218aa3e4b5c6d7e8f90a1b2c3d4e5f60718293a4",
+  "references": {
+    "pdr_issue": "up160/ai-engineering-system#40",
+    "spec_path": "docs/spec.md",
+    "spec_requirements": ["R17"],
+    "adr_disposition": "adr-existing",
+    "applicable_adrs": ["ADR-0005"]
+  },
+  "findings": [],
+  "acceptance_concerns": [],
+  "check_concerns": [],
+  "security_concerns": [],
+  "architecture_conformance": {
+    "conforms": true,
+    "undocumented_decisions": [],
+    "detail": "change conforms to adr-existing and records no undecided architecture"
+  },
+  "unresolved_blockers": [],
+  "result": "ready-for-pm",
+  "next_action": "PM gate assessment of the reviewed head",
+  "next_owner": "chatgpt",
+  "fixes_applied": false,
+  "reviewer_may_approve_own_work": false
+}

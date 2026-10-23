@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 2,
+  "registeredRepository": "up160/noise-monitor",
+  "readableRoots": [
+    "src",
+    "test",
+    "docs",
+    ".github"
+  ],
+  "gitRemote": "origin",
+  "networkGrants": [
+    {
+      "host": "github.com",
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "host": "api.github.com",
+      "operations": [
+        "read",
+        "write"
+      ]
+    }
+  ],
+  "requiredChecks": [
+    "npm test"
+  ],
+  "stackCommands": [
+    {
+      "id": "npm-test",
+      "executable": "npm",
+      "arguments": [
+        {
+          "kind": "literal",
+          "value": "test"
+        }
+      ],
+      "axes": [
+        "process",
+        "filesystem"
+      ]
+    },
+    {
+      "id": "gh-pr-list-issue-branch",
+      "executable": "gh",
+      "arguments": [
+        {
+          "kind": "literal",
+          "value": "pr"
+        },
+        {
+          "kind": "literal",
+          "value": "list"
+        },
+        {
+          "kind": "literal",
+          "value": "--repo"
+        },
+        {
+          "kind": "literal",
+          "value": "up160/noise-monitor"
+        },
+        {
+          "kind": "literal",
+          "value": "--head"
+        },
+        {
+          "kind": "issue-branch"
+        },
+        {
+          "kind": "literal",
+          "value": "--state"
+        },
+        {
+          "kind": "literal",
+          "value": "open"
+        },
+        {
+          "kind": "literal",
+          "value": "--json"
+        },
+        {
+          "kind": "literal",
+          "value": "number"
+        },
+        {
+          "kind": "literal",
+          "value": "--jq"
+        },
+        {
+          "kind": "literal",
+          "value": ".[0].number // empty"
+        }
+      ],
+      "axes": [
+        "process",
+        "network"
+      ]
+    },
+    {
+      "id": "gh-pr-create-issue-branch",
+      "executable": "gh",
+      "arguments": [
+        {
+          "kind": "literal",
+          "value": "pr"
+        },
+        {
+          "kind": "literal",
+          "value": "create"
+        },
+        {
+          "kind": "literal",
+          "value": "--repo"
+        },
+        {
+          "kind": "literal",
+          "value": "up160/noise-monitor"
+        },
+        {
+          "kind": "literal",
+          "value": "--head"
+        },
+        {
+          "kind": "issue-branch"
+        },
+        {
+          "kind": "literal",
+          "value": "--title"
+        },
+        {
+          "kind": "free-text",
+          "maxLength": 256
+        },
+        {
+          "kind": "literal",
+          "value": "--body"
+        },
+        {
+          "kind": "free-text",
+          "maxLength": 16384,
+          "allowLineBreaks": true
+        }
+      ],
+      "axes": [
+        "process",
+        "network"
+      ]
+    }
+  ],
+  "approvedExceptions": []
+}

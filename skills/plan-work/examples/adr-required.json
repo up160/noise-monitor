@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "planning_tier": "major-feature",
+  "problem": "Retailer price collection runs inside the web process, so a slow retailer delays user requests and a restart loses in-flight collection.",
+  "outcome": "Price collection runs as a separate scheduled worker with its own durable queue, so user requests stay fast and a restart resumes collection.",
+  "intended_user_value": "The owner keeps a responsive product and complete price history even when a retailer is slow or the host restarts.",
+  "scope": [
+    "Move retailer collection out of the request path into a scheduled worker.",
+    "Persist the collection queue so work resumes after restart."
+  ],
+  "out_of_scope": [
+    "Changing which retailers are supported.",
+    "Real-time push updates to the browser."
+  ],
+  "requirements": [
+    "Collection work is enqueued durably and processed outside the request path.",
+    "A restart resumes pending collection without duplicating recorded prices.",
+    "Collection failures are recorded and retried with a bounded policy."
+  ],
+  "acceptance_criteria": [
+    "A user request completes without waiting for retailer collection.",
+    "Restarting the worker mid-run resumes pending items exactly once.",
+    "A failing retailer is retried within the bounded policy and then recorded as failed."
+  ],
+  "constraints": [
+    "No additional recurring hosting cost beyond the existing plan.",
+    "No inbound network listener."
+  ],
+  "risks": [
+    "Queue durability choice affects future hosting portability.",
+    "Exactly-once recording depends on idempotent write keys."
+  ],
+  "dependencies": {
+    "hard": [
+      { "kind": "issue", "number": 131 }
+    ],
+    "gates": [
+      { "kind": "pm", "name": "architecture-review", "action": "ready" }
+    ],
+    "ordering": []
+  },
+  "adr_disposition": {
+    "kind": "adr-required",
+    "adr_references": ["ADR-0010"],
+    "reason": "Introduces a new long-lived runtime and durable queue ownership; ADR-0010 records the decision and is linked before implementation proceeds."
+  },
+  "owner_decisions": [
+    "Accept a background worker rather than extending request timeouts."
+  ],
+  "spec_references": [
+    "docs/spec.md#architecture-summary"
+  ],
+  "writable_paths": [
+    "src/ingest/worker",
+    "src/ingest/queue"
+  ],
+  "github": {
+    "repo": "up160/find-my-booster",
+    "issue_number": 134,
+    "issue_is_canonical": true
+  },
+  "source": {
+    "kind": "owner-conversation",
+    "authoritative": false,
+    "summary": "Conversation exposed a material architecture decision; the ADR was created and linked before implementation."
+  }
+}

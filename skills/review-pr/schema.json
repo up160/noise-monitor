@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://up160.github.io/ai-engineering-system/skills/review-pr/schema.json",
+  "title": "review-pr result",
+  "description": "Normalized independent review of one pull request at an exact head SHA, suitable for the PM gate and the existing capped review loop.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "skill",
+    "engineering_system_version",
+    "repository",
+    "issue_number",
+    "pull_request",
+    "head_sha",
+    "references",
+    "findings",
+    "acceptance_concerns",
+    "check_concerns",
+    "security_concerns",
+    "architecture_conformance",
+    "unresolved_blockers",
+    "result",
+    "next_action",
+    "next_owner",
+    "fixes_applied",
+    "reviewer_may_approve_own_work"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "description": "Result format version."
+    },
+    "skill": {
+      "const": "review-pr",
+      "description": "Canonical skill that produced the result."
+    },
+    "engineering_system_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "Pinned engineering-system version carried from the packet."
+    },
+    "repository": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "owner/name of the registered repository."
+    },
+    "issue_number": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The authoritative work item the pull request delivers."
+    },
+    "pull_request": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The pull request reviewed."
+    },
+    "head_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "The exact head SHA the review is pinned to; a review of any other commit is stale."
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pdr_issue", "spec_path", "spec_requirements", "adr_disposition", "applicable_adrs"],
+      "description": "Authority this review was measured against, carried from the packet and refreshed state.",
+      "properties": {
+        "pdr_issue": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "spec_path": {
+          "type": ["string", "null"]
+        },
+        "spec_requirements": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+        },
+        "adr_disposition": {
+          "enum": ["adr-not-required", "adr-existing", "adr-required", "needs-pm-adr"]
+        },
+        "applicable_adrs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "description": "Findings at the pinned head, classified with the global severity vocabulary only.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "severity", "area", "summary", "evidence", "locator"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "severity": {
+            "enum": ["blocking", "should-fix", "suggestion", "out-of-scope"],
+            "description": "The existing global severity model; this skill never invents a class."
+          },
+          "area": {
+            "enum": [
+              "acceptance-criteria",
+              "correctness",
+              "security",
+              "simplicity",
+              "checks",
+              "architecture",
+              "scope"
+            ],
+            "description": "What the finding is about, so the PM gate can route it without reading prose."
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "description": "Concise, non-secret evidence observed at the pinned head."
+          },
+          "locator": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "description": "Where the finding lives, e.g. a repository-relative path and line."
+          }
+        }
+      }
+    },
+    "acceptance_concerns": {
+      "type": "array",
+      "description": "Acceptance criteria this review could not confirm at the pinned head.",
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+    },
+    "check_concerns": {
+      "type": "array",
+      "description": "Required checks that are failing, pending or absent at the pinned head.",
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+    },
+    "security_concerns": {
+      "type": "array",
+      "description": "Security observations, recorded without secret values.",
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+    },
+    "architecture_conformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["conforms", "undocumented_decisions", "detail"],
+      "description": "Whether the change conforms to accepted architecture, and what it decided without recording.",
+      "properties": {
+        "conforms": { "type": "boolean" },
+        "undocumented_decisions": {
+          "type": "array",
+          "description": "Material scope or architecture decisions the pull request makes but does not record.",
+          "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "unresolved_blockers": {
+      "type": "array",
+      "description": "Blocking and should-fix findings, fingerprinted for the existing capped review loop.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "fingerprint", "severity", "summary"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "fingerprint": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "description": "Derived from severity, area, locator and normalized summary only — never the head SHA, so the same blocker keeps its identity across attempts."
+          },
+          "severity": { "enum": ["blocking", "should-fix"] },
+          "summary": { "type": "string", "minLength": 1, "pattern": "\\S" }
+        }
+      }
+    },
+    "result": {
+      "enum": ["blocking-findings", "should-fix-findings", "ready-for-pm"],
+      "description": "The overall outcome; exactly one of the three existing states."
+    },
+    "next_action": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "next_owner": {
+      "enum": ["codex", "claude-code", "chatgpt", "owner", "local-worker"],
+      "description": "Who acts next on this result."
+    },
+    "fixes_applied": {
+      "const": false,
+      "description": "The review job never implements a fix."
+    },
+    "reviewer_may_approve_own_work": {
+      "const": false,
+      "description": "Reviewer independence is a policy invariant, pinned structurally."
+    }
+  }
+}

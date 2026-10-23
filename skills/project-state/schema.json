@@ -1,0 +1,1569 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/up160/ai-engineering-system/skills/project-state/schema.json",
+  "title": "Project state snapshot",
+  "description": "Normalized read-only snapshot of authoritative project state produced by the canonical project-state skill.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "project",
+    "active_work",
+    "pull_request",
+    "review",
+    "checks",
+    "dependencies",
+    "specification",
+    "adr",
+    "security_flags",
+    "next_expected",
+    "owner_action_required",
+    "owner_action",
+    "freshness",
+    "conflicts"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "description": "Snapshot format version."
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "engineering_system_version",
+        "phase",
+        "lifecycle_state",
+        "owner_set"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]+/[A-Za-z0-9._-]+$"
+        },
+        "engineering_system_version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Exact engineering-system pin read from .ai/project.yml."
+        },
+        "phase": {
+          "enum": [
+            "discovery",
+            "mvp",
+            "post-mvp",
+            "mature",
+            "unknown"
+          ]
+        },
+        "lifecycle_state": {
+          "enum": [
+            "active",
+            "paused",
+            "maintenance",
+            "archived",
+            "unknown"
+          ]
+        },
+        "owner_set": {
+          "type": "boolean",
+          "description": "True only when explicit owner evidence set the lifecycle state."
+        }
+      },
+      "if": {
+        "properties": {
+          "lifecycle_state": {
+            "enum": [
+              "maintenance",
+              "archived"
+            ]
+          }
+        },
+        "required": [
+          "lifecycle_state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "owner_set": {
+            "const": true
+          }
+        },
+        "required": [
+          "owner_set"
+        ]
+      }
+    },
+    "active_work": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "issue_number",
+        "title",
+        "purpose",
+        "workflow_status",
+        "workflow_transition",
+        "implementation_owner",
+        "assigned_implementer",
+        "assigned_reviewer"
+      ],
+      "properties": {
+        "issue_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "workflow_status": {
+          "enum": [
+            "Backlog",
+            "Ready",
+            "Building",
+            "Review",
+            "PM Gate",
+            "Deploying",
+            "Done",
+            "Blocked",
+            "unknown"
+          ]
+        },
+        "workflow_transition": {
+          "enum": [
+            "planned",
+            "ready-for-build",
+            "building",
+            "ready-for-review",
+            "changes-requested",
+            "ready-for-pm",
+            "mergeable",
+            "deploying",
+            "done",
+            "blocked",
+            "unknown"
+          ]
+        },
+        "implementation_owner": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "codex",
+            "claude-code",
+            "chatgpt",
+            "owner",
+            "local-worker",
+            "unknown",
+            null
+          ]
+        },
+        "assigned_implementer": {
+          "description": "The implementer the issue body assigns. Null where the issue settles no single role: an unread assignment is never defaulted.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "codex",
+            "claude-code",
+            "chatgpt",
+            "owner",
+            "local-worker",
+            null
+          ]
+        },
+        "assigned_reviewer": {
+          "description": "The independent reviewer the issue body assigns. Null where the issue settles no single role.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "codex",
+            "claude-code",
+            "chatgpt",
+            "owner",
+            "local-worker",
+            null
+          ]
+        }
+      }
+    },
+    "pull_request": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "number",
+        "head_sha",
+        "base_sha",
+        "state",
+        "mergeable",
+        "checks_summary"
+      ],
+      "properties": {
+        "number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "head_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "base_sha": {
+          "description": "The commit the pull request is based on, read from the same anchored GitHub query as the head. An ancestor of the head is a weaker claim than this pull request's base: the head is its own ancestor, so a caller naming it would produce an empty diff.",
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "state": {
+          "enum": [
+            "open",
+            "closed",
+            "merged",
+            "unknown"
+          ]
+        },
+        "mergeable": {
+          "enum": [
+            "mergeable",
+            "conflicting",
+            "blocked",
+            "unknown"
+          ]
+        },
+        "checks_summary": {
+          "enum": [
+            "passing",
+            "failing",
+            "pending",
+            "none",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "unresolved_findings"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not-started",
+            "in-progress",
+            "changes-requested",
+            "approved",
+            "not-applicable",
+            "unknown"
+          ]
+        },
+        "unresolved_findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "severity",
+              "summary",
+              "locator"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "severity": {
+                "enum": [
+                  "blocking",
+                  "should-fix",
+                  "suggestion",
+                  "out-of-scope"
+                ],
+                "description": "Only blocking and should-fix count as unresolved review blockers."
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            }
+          }
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "entries"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "passing",
+            "failing",
+            "pending",
+            "none",
+            "unknown"
+          ]
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "status",
+              "detail"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "status": {
+                "enum": [
+                  "success",
+                  "failure",
+                  "pending",
+                  "neutral",
+                  "unknown"
+                ]
+              },
+              "detail": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            }
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Copied verbatim from the ADR-0009 dependency gate evaluation, including its action scope; never re-derived here.",
+      "required": [
+        "action",
+        "state",
+        "eligible",
+        "route_to_pm",
+        "blocker_ids",
+        "reason_codes",
+        "blockers",
+        "snapshot_id",
+        "observed_at"
+      ],
+      "properties": {
+        "action": {
+          "description": "Protected action this evaluation was produced for. eligible applies only to this action; a ready result is never reusable as dispatch evidence.",
+          "enum": [
+            "ready",
+            "claim",
+            "building",
+            "dispatch"
+          ]
+        },
+        "state": {
+          "enum": [
+            "satisfied",
+            "blocked-open-issue",
+            "blocked-unmerged-pr",
+            "blocked-gate-approval",
+            "blocked-security",
+            "blocked-adr",
+            "blocked-paused",
+            "unknown",
+            "circular",
+            "conflicting"
+          ]
+        },
+        "eligible": {
+          "type": "boolean"
+        },
+        "route_to_pm": {
+          "type": "boolean"
+        },
+        "blocker_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "blocked-open-issue",
+              "blocked-unmerged-pr",
+              "blocked-gate-approval",
+              "blocked-security",
+              "blocked-adr",
+              "blocked-paused",
+              "unknown",
+              "circular",
+              "conflicting"
+            ]
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "reason_code",
+              "detail",
+              "route_to_pm",
+              "escalation"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "reason_code": {
+                "enum": [
+                  "blocked-open-issue",
+                  "blocked-unmerged-pr",
+                  "blocked-gate-approval",
+                  "blocked-security",
+                  "blocked-adr",
+                  "blocked-paused",
+                  "unknown",
+                  "circular",
+                  "conflicting"
+                ]
+              },
+              "detail": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "route_to_pm": {
+                "type": "boolean"
+              },
+              "escalation": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "needs-pm",
+                  "needs-owner",
+                  null
+                ]
+              }
+            }
+          }
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "specification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "requirement_refs",
+        "revision",
+        "state"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "requirement_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^R\\d+$"
+          }
+        },
+        "revision": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "state": {
+          "enum": [
+            "fresh",
+            "stale",
+            "missing",
+            "conflicting"
+          ]
+        }
+      }
+    },
+    "adr": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "disposition",
+        "applicable_adrs",
+        "reason"
+      ],
+      "properties": {
+        "disposition": {
+          "enum": [
+            "adr-not-required",
+            "adr-existing",
+            "adr-required",
+            "needs-pm-adr",
+            "unknown"
+          ]
+        },
+        "applicable_adrs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ADR-\\d{4}$"
+          }
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      }
+    },
+    "security_flags": {
+      "type": "array",
+      "description": "Populated only where authoritative evidence exists; an empty array is not a safety claim.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "detail",
+          "locator"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "locator": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      }
+    },
+    "next_expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow_status",
+        "workflow_transition",
+        "action"
+      ],
+      "properties": {
+        "workflow_status": {
+          "enum": [
+            "Backlog",
+            "Ready",
+            "Building",
+            "Review",
+            "PM Gate",
+            "Deploying",
+            "Done",
+            "Blocked",
+            "unknown"
+          ]
+        },
+        "workflow_transition": {
+          "enum": [
+            "planned",
+            "ready-for-build",
+            "building",
+            "ready-for-review",
+            "changes-requested",
+            "ready-for-pm",
+            "mergeable",
+            "deploying",
+            "done",
+            "blocked",
+            "unknown"
+          ]
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "owner_action_required": {
+      "type": "boolean"
+    },
+    "owner_action": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "reason",
+        "action"
+      ],
+      "properties": {
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observed_at",
+        "sources"
+      ],
+      "properties": {
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "locator",
+              "revision",
+              "updated_at",
+              "state"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "project-config",
+                  "agents-md",
+                  "specification",
+                  "adr",
+                  "skills-registry",
+                  "github-issue",
+                  "github-pull-request",
+                  "github-review",
+                  "github-checks",
+                  "github-project",
+                  "dependency-gate",
+                  "release"
+                ]
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "revision": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              },
+              "updated_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "state": {
+                "enum": [
+                  "fresh",
+                  "stale",
+                  "missing",
+                  "conflicting",
+                  "not-applicable"
+                ],
+                "description": "not-applicable records an expected absence (evidence that legitimately does not exist yet at this stage). stale/missing/conflicting mean evidence that should exist could not be read confidently and still fail closed."
+              }
+            }
+          }
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "description": "Explicit conflicting-evidence records; conflicts are surfaced, never resolved here.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "detail",
+          "sources",
+          "routes_to"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          "routes_to": {
+            "enum": [
+              "needs-pm",
+              "needs-owner"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "if": {
+    "properties": {
+      "owner_action_required": {
+        "const": true
+      }
+    },
+    "required": [
+      "owner_action_required"
+    ]
+  },
+  "then": {
+    "properties": {
+      "owner_action": {
+        "type": "object",
+        "required": [
+          "reason",
+          "action"
+        ]
+      }
+    },
+    "required": [
+      "owner_action"
+    ]
+  },
+  "allOf": [
+    {
+      "$comment": "A not-applicable pull-request source is only honest when no pull request is published.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "freshness": {
+            "type": "object",
+            "properties": {
+              "sources": {
+                "type": "array",
+                "contains": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "github-pull-request"
+                    },
+                    "state": {
+                      "const": "not-applicable"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "state"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "sources"
+            ]
+          }
+        },
+        "required": [
+          "freshness"
+        ]
+      },
+      "then": {
+        "properties": {
+          "pull_request": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "$comment": "A not-applicable review source requires review evidence that is genuinely absent.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "freshness": {
+            "type": "object",
+            "properties": {
+              "sources": {
+                "type": "array",
+                "contains": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "github-review"
+                    },
+                    "state": {
+                      "const": "not-applicable"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "state"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "sources"
+            ]
+          }
+        },
+        "required": [
+          "freshness"
+        ]
+      },
+      "then": {
+        "properties": {
+          "review": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "not-started",
+                  "not-applicable"
+                ]
+              },
+              "unresolved_findings": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "A not-applicable checks source requires check evidence that is genuinely absent.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "freshness": {
+            "type": "object",
+            "properties": {
+              "sources": {
+                "type": "array",
+                "contains": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "github-checks"
+                    },
+                    "state": {
+                      "const": "not-applicable"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "state"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "sources"
+            ]
+          }
+        },
+        "required": [
+          "freshness"
+        ]
+      },
+      "then": {
+        "properties": {
+          "checks": {
+            "properties": {
+              "status": {
+                "const": "none"
+              },
+              "entries": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Only Backlog, Ready and Building may claim an expected absence of pull-request, review or check evidence. Blocked and unknown do not prove a pre-implementation stage.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "active_work": {
+            "type": "object",
+            "properties": {
+              "workflow_status": {
+                "enum": [
+                  "Review",
+                  "PM Gate",
+                  "Deploying",
+                  "Done",
+                  "Blocked",
+                  "unknown"
+                ]
+              }
+            },
+            "required": [
+              "workflow_status"
+            ]
+          }
+        },
+        "required": [
+          "active_work"
+        ]
+      },
+      "then": {
+        "properties": {
+          "freshness": {
+            "properties": {
+              "sources": {
+                "not": {
+                  "contains": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "enum": [
+                          "github-pull-request",
+                          "github-review",
+                          "github-checks"
+                        ]
+                      },
+                      "state": {
+                        "const": "not-applicable"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "state"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Only pull-request, review and check evidence has an expected-absence rule; every other source kind must report real freshness.",
+      "properties": {
+        "freshness": {
+          "properties": {
+            "sources": {
+              "not": {
+                "contains": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "not": {
+                        "enum": [
+                          "github-pull-request",
+                          "github-review",
+                          "github-checks"
+                        ]
+                      }
+                    },
+                    "state": {
+                      "const": "not-applicable"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "state"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "A satisfied dependency evaluation records eligibility and no blockers or reason codes.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "dependencies": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "satisfied"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        },
+        "required": [
+          "dependencies"
+        ]
+      },
+      "then": {
+        "properties": {
+          "dependencies": {
+            "properties": {
+              "eligible": {
+                "const": true
+              },
+              "blockers": {
+                "maxItems": 0
+              },
+              "reason_codes": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Every non-satisfied dependency state fails closed: it is ineligible and records why.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "dependencies": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "blocked-open-issue",
+                  "blocked-unmerged-pr",
+                  "blocked-gate-approval",
+                  "blocked-security",
+                  "blocked-adr",
+                  "blocked-paused",
+                  "unknown",
+                  "circular",
+                  "conflicting"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        },
+        "required": [
+          "dependencies"
+        ]
+      },
+      "then": {
+        "properties": {
+          "dependencies": {
+            "properties": {
+              "eligible": {
+                "const": false
+              },
+              "blockers": {
+                "minItems": 1
+              },
+              "reason_codes": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "ADR-0004 makes the rationale the required evidence for adr-not-required.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "adr": {
+            "type": "object",
+            "properties": {
+              "disposition": {
+                "const": "adr-not-required"
+              }
+            },
+            "required": [
+              "disposition"
+            ]
+          }
+        },
+        "required": [
+          "adr"
+        ]
+      },
+      "then": {
+        "properties": {
+          "adr": {
+            "properties": {
+              "reason": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            },
+            "required": [
+              "reason"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Transition planned describes status Backlog.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "active_work": {
+            "type": "object",
+            "properties": {
+              "workflow_transition": {
+                "const": "planned"
+              }
+            },
+            "required": [
+              "workflow_transition"
+            ]
+          }
+        },
+        "required": [
+          "active_work"
+        ]
+      },
+      "then": {
+        "properties": {
+          "active_work": {
+            "properties": {
+              "workflow_status": {
+                "enum": [
+                  "Backlog",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Transition ready-for-build describes status Ready.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "active_work": {
+            "type": "object",
+            "properties": {
+              "workflow_transition": {
+                "const": "ready-for-build"
+              }
+            },
+            "required": [
+              "workflow_transition"
+            ]
+          }
+        },
+        "required": [
+          "active_work"
+        ]
+      },
+      "then": {
+        "properties": {
+          "active_work": {
+            "properties": {
+              "workflow_status": {
+                "enum": [
+                  "Ready",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Transition building describes status Building.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "active_work": {
+            "type": "object",
+            "properties": {
+              "workflow_transition": {
+                "const": "building"
+              }
+            },
+            "required": [
+              "workflow_transition"
+            ]
+          }
+        },
+        "required": [
+          "active_work"
+        ]
+      },
+      "then": {
+        "properties": {
+          "active_work": {
+            "properties": {
+              "workflow_status": {
+                "enum": [
+                  "Building",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Transition ready-for-review describes status Review.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "active_work": {
+            "type": "object",
+            "properties": {
+              "workflow_transition": {
+                "const": "ready-for-review"
+              }
+            },
+            "required": [
+              "workflow_transition"
+            ]
+          }
+        },
+        "required": [
+          "active_work"
+        ]
+      },
+      "then": {
+        "properties": {
+          "active_work": {
+            "properties": {
+              "workflow_status": {
+                "enum": [
+                  "Review",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Transition changes-requested describes status Review.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "active_work": {
+            "type": "object",
+            "properties": {
+              "workflow_transition": {
+                "const": "changes-requested"
+              }
+            },
+            "required": [
+              "workflow_transition"
+            ]
+          }
+        },
+        "required": [
+          "active_work"
+        ]
+      },
+      "then": {
+        "properties": {
+          "active_work": {
+            "properties": {
+              "workflow_status": {
+                "enum": [
+                  "Review",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Transition ready-for-pm describes status PM Gate.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "active_work": {
+            "type": "object",
+            "properties": {
+              "workflow_transition": {
+                "const": "ready-for-pm"
+              }
+            },
+            "required": [
+              "workflow_transition"
+            ]
+          }
+        },
+        "required": [
+          "active_work"
+        ]
+      },
+      "then": {
+        "properties": {
+          "active_work": {
+            "properties": {
+              "workflow_status": {
+                "enum": [
+                  "PM Gate",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Transition mergeable describes status PM Gate.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "active_work": {
+            "type": "object",
+            "properties": {
+              "workflow_transition": {
+                "const": "mergeable"
+              }
+            },
+            "required": [
+              "workflow_transition"
+            ]
+          }
+        },
+        "required": [
+          "active_work"
+        ]
+      },
+      "then": {
+        "properties": {
+          "active_work": {
+            "properties": {
+              "workflow_status": {
+                "enum": [
+                  "PM Gate",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Transition deploying describes status Deploying.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "active_work": {
+            "type": "object",
+            "properties": {
+              "workflow_transition": {
+                "const": "deploying"
+              }
+            },
+            "required": [
+              "workflow_transition"
+            ]
+          }
+        },
+        "required": [
+          "active_work"
+        ]
+      },
+      "then": {
+        "properties": {
+          "active_work": {
+            "properties": {
+              "workflow_status": {
+                "enum": [
+                  "Deploying",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Transition done describes status Done.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "active_work": {
+            "type": "object",
+            "properties": {
+              "workflow_transition": {
+                "const": "done"
+              }
+            },
+            "required": [
+              "workflow_transition"
+            ]
+          }
+        },
+        "required": [
+          "active_work"
+        ]
+      },
+      "then": {
+        "properties": {
+          "active_work": {
+            "properties": {
+              "workflow_status": {
+                "enum": [
+                  "Done",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Transition blocked describes status Blocked.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "active_work": {
+            "type": "object",
+            "properties": {
+              "workflow_transition": {
+                "const": "blocked"
+              }
+            },
+            "required": [
+              "workflow_transition"
+            ]
+          }
+        },
+        "required": [
+          "active_work"
+        ]
+      },
+      "then": {
+        "properties": {
+          "active_work": {
+            "properties": {
+              "workflow_status": {
+                "enum": [
+                  "Blocked",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "An owner action is only published when one is required.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "owner_action_required": {
+            "const": false
+          }
+        },
+        "required": [
+          "owner_action_required"
+        ]
+      },
+      "then": {
+        "properties": {
+          "owner_action": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "repository": "up160/ai-engineering-system",
+    "engineering_system_version": "0.1.9",
+    "phase": "discovery",
+    "lifecycle_state": "active",
+    "owner_set": false
+  },
+  "active_work": {
+    "issue_number": 41,
+    "title": "Implement canonical prepare-task skill",
+    "purpose": "Assemble one bounded work packet from authoritative GitHub truth.",
+    "workflow_status": "Ready",
+    "workflow_transition": "ready-for-build",
+    "implementation_owner": "codex",
+      "assigned_implementer": "codex",
+      "assigned_reviewer": "claude-code"
+  },
+  "pull_request": null,
+  "review": {
+    "status": "not-started",
+    "unresolved_findings": []
+  },
+  "checks": {
+    "status": "none",
+    "entries": []
+  },
+  "dependencies": {
+    "action": "dispatch",
+    "state": "satisfied",
+    "eligible": true,
+    "route_to_pm": false,
+    "blocker_ids": [],
+    "reason_codes": [],
+    "blockers": [],
+    "snapshot_id": "9b2e4c60d8f13a5720ce6b9d4f8a1c35e7092b46",
+    "observed_at": "2026-09-02T10:05:00Z"
+  },
+  "specification": {
+    "path": "docs/spec.md",
+    "requirement_refs": [
+      "R18"
+    ],
+    "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+    "state": "fresh"
+  },
+  "adr": {
+    "disposition": "adr-existing",
+    "applicable_adrs": [
+      "ADR-0005"
+    ],
+    "reason": null
+  },
+  "security_flags": [],
+  "next_expected": {
+    "workflow_status": "Building",
+    "workflow_transition": "building",
+    "action": "Dispatch the implementer to claim issue #41 and open its first pull request."
+  },
+  "owner_action_required": false,
+  "owner_action": null,
+  "freshness": {
+    "observed_at": "2026-09-02T10:05:02Z",
+    "sources": [
+      {
+        "kind": "project-config",
+        "locator": ".ai/project.yml",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "specification",
+        "locator": "docs/spec.md",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "adr",
+        "locator": "docs/adr/0005-shared-skills-layer.md",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-issue",
+        "locator": "up160/ai-engineering-system#41",
+        "revision": null,
+        "updated_at": "2026-09-02T10:01:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-pull-request",
+        "locator": "up160/ai-engineering-system#41 pull requests",
+        "revision": null,
+        "updated_at": null,
+        "state": "not-applicable"
+      },
+      {
+        "kind": "github-review",
+        "locator": "up160/ai-engineering-system#41 reviews",
+        "revision": null,
+        "updated_at": null,
+        "state": "not-applicable"
+      },
+      {
+        "kind": "github-checks",
+        "locator": "up160/ai-engineering-system#41 checks",
+        "revision": null,
+        "updated_at": null,
+        "state": "not-applicable"
+      },
+      {
+        "kind": "github-project",
+        "locator": "up160 project 1 / Status",
+        "revision": null,
+        "updated_at": "2026-09-02T10:02:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "dependency-gate",
+        "locator": "dependency-evaluation:9b2e4c60d8f13a5720ce6b9d4f8a1c35e7092b46",
+        "revision": "9b2e4c60d8f13a5720ce6b9d4f8a1c35e7092b46",
+        "updated_at": "2026-09-02T10:05:00Z",
+        "state": "fresh"
+      }
+    ]
+  },
+  "conflicts": []
+}

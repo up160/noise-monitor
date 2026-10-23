@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "repository": "up160/ai-engineering-system",
+    "engineering_system_version": "0.1.9",
+    "phase": "discovery",
+    "lifecycle_state": "active",
+    "owner_set": false
+  },
+  "active_work": {
+    "issue_number": 40,
+    "title": "Implement canonical project-state skill",
+    "purpose": "Provide one read-only procedure that derives authoritative project state.",
+    "workflow_status": "Building",
+    "workflow_transition": "building",
+    "implementation_owner": "codex",
+      "assigned_implementer": "codex",
+      "assigned_reviewer": "claude-code"
+  },
+  "pull_request": {
+    "number": 63,
+    "head_sha": "0f1e2d3c4b5a69788796a5b4c3d2e1f00f1e2d3c",
+      "base_sha": "bbbbbbbb4b5a69788796a5b4c3d2e1f00f1e2d3c",
+    "state": "open",
+    "mergeable": "mergeable",
+    "checks_summary": "passing"
+  },
+  "review": {
+    "status": "in-progress",
+    "unresolved_findings": []
+  },
+  "checks": {
+    "status": "passing",
+    "entries": [
+      {
+        "name": "Orchestrator tests",
+        "status": "success",
+        "detail": "npm test completed with no failing assertions"
+      },
+      {
+        "name": "Markdown lint",
+        "status": "success",
+        "detail": "markdownlint-cli2 reported no violations"
+      },
+      {
+        "name": "Secret scan",
+        "status": "success",
+        "detail": "no verified or unknown findings"
+      }
+    ]
+  },
+  "dependencies": {
+    "action": "claim",
+    "state": "satisfied",
+    "eligible": true,
+    "route_to_pm": false,
+    "blocker_ids": [],
+    "reason_codes": [],
+    "blockers": [],
+    "snapshot_id": "5c1d7a90b2e34f6180ac9d5e7f1b3c24a6d8e0f2",
+    "observed_at": "2026-09-02T09:15:00Z"
+  },
+  "specification": {
+    "path": "docs/spec.md",
+    "requirement_refs": [
+      "R17"
+    ],
+    "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+    "state": "fresh"
+  },
+  "adr": {
+    "disposition": "adr-existing",
+    "applicable_adrs": [
+      "ADR-0005"
+    ],
+    "reason": null
+  },
+  "security_flags": [],
+  "next_expected": {
+    "workflow_status": "Review",
+    "workflow_transition": "ready-for-review",
+    "action": "Complete the implementation and request independent review of PR #63."
+  },
+  "owner_action_required": false,
+  "owner_action": null,
+  "freshness": {
+    "observed_at": "2026-09-02T09:15:02Z",
+    "sources": [
+      {
+        "kind": "project-config",
+        "locator": ".ai/project.yml",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "specification",
+        "locator": "docs/spec.md",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "adr",
+        "locator": "docs/adr/0005-shared-skills-layer.md",
+        "revision": "2973877b1c4d5e6f708192a3b4c5d6e7f8091a2b",
+        "updated_at": "2026-09-01T18:04:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-issue",
+        "locator": "up160/ai-engineering-system#40",
+        "revision": null,
+        "updated_at": "2026-09-02T09:02:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-pull-request",
+        "locator": "up160/ai-engineering-system#63",
+        "revision": "0f1e2d3c4b5a69788796a5b4c3d2e1f00f1e2d3c",
+        "updated_at": "2026-09-02T09:11:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-review",
+        "locator": "up160/ai-engineering-system#63 reviews",
+        "revision": null,
+        "updated_at": "2026-09-02T09:12:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-checks",
+        "locator": "up160/ai-engineering-system@0f1e2d3c4b5a69788796a5b4c3d2e1f00f1e2d3c",
+        "revision": "0f1e2d3c4b5a69788796a5b4c3d2e1f00f1e2d3c",
+        "updated_at": "2026-09-02T09:14:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "github-project",
+        "locator": "up160 project 1 / Status",
+        "revision": null,
+        "updated_at": "2026-09-02T09:03:00Z",
+        "state": "fresh"
+      },
+      {
+        "kind": "dependency-gate",
+        "locator": "dependency-evaluation:5c1d7a90b2e34f6180ac9d5e7f1b3c24a6d8e0f2",
+        "revision": "5c1d7a90b2e34f6180ac9d5e7f1b3c24a6d8e0f2",
+        "updated_at": "2026-09-02T09:15:00Z",
+        "state": "fresh"
+      }
+    ]
+  },
+  "conflicts": []
+}

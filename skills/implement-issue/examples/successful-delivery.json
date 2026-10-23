@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "skill": "implement-issue",
+  "engineering_system_version": "0.1.12",
+  "repository": "up160/ai-engineering-system",
+  "issue_number": 41,
+  "branch": "issue-41-prepare-task",
+  "pull_request": 64,
+  "head_sha": "d6f38650a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "acceptance_evidence": [
+    {
+      "criterion": "`skills/prepare-task/SKILL.md` follows the #39 skill contract.",
+      "evidence": "orchestrator/test/prepare-task-skill.test.ts asserts the seven canonical headings in order.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Preparation fails closed on unreliable or conflicting state.",
+      "evidence": "orchestrator/test/prepare-task-skill.test.ts covers state-unreliable and state-conflicting refusals.",
+      "satisfied": true
+    }
+  ],
+  "checks": [
+    {
+      "command": "npm --prefix orchestrator test",
+      "status": "passed",
+      "detail": "94 tests, 0 failures"
+    },
+    {
+      "command": "npm --prefix orchestrator run typecheck",
+      "status": "passed",
+      "detail": "no diagnostics"
+    }
+  ],
+  "changes": [
+    {
+      "path": "skills/prepare-task/SKILL.md",
+      "summary": "Canonical procedure for turning refreshed state and one work item into a bounded packet."
+    },
+    {
+      "path": "orchestrator/src/task-packet-contract.ts",
+      "summary": "Pure packet contract with auditable refusal reason codes."
+    }
+  ],
+  "deviations": [],
+  "risks": [
+    "Allowed-path selection is capped at twenty entries; a very wide work item will surface as a narrow packet rather than a repository dump."
+  ],
+  "follow_ups": [],
+  "adr": {
+    "disposition": "adr-existing",
+    "references": [
+      "ADR-0005"
+    ]
+  },
+  "next_job": "review-pr",
+  "self_review_permitted": false
+}

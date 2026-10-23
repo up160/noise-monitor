@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "skill": "review-pr",
+  "engineering_system_version": "0.1.13",
+  "repository": "up160/ai-engineering-system",
+  "issue_number": 45,
+  "pull_request": 60,
+  "head_sha": "dacf7861f2e3d4c5b6a7908172635445e6f7a8b9",
+  "references": {
+    "pdr_issue": "up160/ai-engineering-system#45",
+    "spec_path": "docs/spec.md",
+    "spec_requirements": ["R21"],
+    "adr_disposition": "adr-existing",
+    "applicable_adrs": ["ADR-0009"]
+  },
+  "findings": [
+    {
+      "id": "ac-1",
+      "severity": "blocking",
+      "area": "acceptance-criteria",
+      "summary": "\"Worker dispatch requires refreshed dependency evidence\" is not met at this head",
+      "evidence": "dispatch reuses the claim-scoped evaluation; no test covers a dispatch-scoped refusal",
+      "locator": "orchestrator/src/dependency-gate.ts:412"
+    },
+    {
+      "id": "sec-1",
+      "severity": "blocking",
+      "area": "security",
+      "summary": "a blocker detail is written to the audit log without redaction",
+      "evidence": "the detail string is interpolated straight into the log line",
+      "locator": "orchestrator/src/logger.ts:31"
+    }
+  ],
+  "acceptance_concerns": [
+    "Worker dispatch requires refreshed dependency evidence."
+  ],
+  "check_concerns": [
+    "Orchestrator tests is failure: 2 assertions failed"
+  ],
+  "security_concerns": [
+    "sec-1: a blocker detail is written to the audit log without redaction"
+  ],
+  "architecture_conformance": {
+    "conforms": true,
+    "undocumented_decisions": [],
+    "detail": "change conforms to adr-existing and records no undecided architecture"
+  },
+  "unresolved_blockers": [
+    {
+      "id": "ac-1",
+      "fingerprint": "0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9",
+      "severity": "blocking",
+      "summary": "\"Worker dispatch requires refreshed dependency evidence\" is not met at this head"
+    },
+    {
+      "id": "sec-1",
+      "fingerprint": "1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90a",
+      "severity": "blocking",
+      "summary": "a blocker detail is written to the audit log without redaction"
+    }
+  ],
+  "result": "blocking-findings",
+  "next_action": "codex addresses the unresolved findings and pushes a new head",
+  "next_owner": "codex",
+  "fixes_applied": false,
+  "reviewer_may_approve_own_work": false
+}
