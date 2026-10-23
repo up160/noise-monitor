@@ -58,7 +58,7 @@ and reports stay out of version control (`reports/` is ignored).
 
 ## Architecture Summary
 
-Plain JavaScript ES modules on Node 20 or later, with no dependencies. `node --test` is the
+Plain JavaScript ES modules on Node 22 or later, with no dependencies. `node --test` is the
 test runner. Pure functions in `src/`, with fixtures in `test/fixtures/`.
 
 ## Deployment / Observability
