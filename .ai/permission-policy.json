@@ -29,7 +29,8 @@
     }
   ],
   "requiredChecks": [
-    "npm test"
+    "npm test",
+    "npm run fixtures"
   ],
   "stackCommands": [
     {
@@ -39,6 +40,24 @@
         {
           "kind": "literal",
           "value": "test"
+        }
+      ],
+      "axes": [
+        "process",
+        "filesystem"
+      ]
+    },
+    {
+      "id": "npm-run-fixtures",
+      "executable": "npm",
+      "arguments": [
+        {
+          "kind": "literal",
+          "value": "run"
+        },
+        {
+          "kind": "literal",
+          "value": "fixtures"
         }
       ],
       "axes": [
