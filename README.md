@@ -10,7 +10,7 @@ later epic.
 npm test
 ```
 
-No dependencies, Node 20 or later.
+No dependencies, Node 22 or later.
 
 ## How this repo is built
 

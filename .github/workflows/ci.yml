@@ -18,3 +18,10 @@ jobs:
         with:
           node-version: "22"
       - run: npm test
+      # The committed fixture must be exactly what the generator produces (once it exists).
+      - name: Fixture is reproducible
+        run: |
+          if [ -f test/fixtures/generate-evening.js ]; then
+            npm run fixtures
+            git diff --exit-code -- test/fixtures
+          fi

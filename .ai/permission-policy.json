@@ -9,7 +9,9 @@
     "src",
     "test",
     "docs",
-    ".github"
+    ".github",
+    ".ai",
+    "skills"
   ],
   "gitRemote": "origin",
   "networkGrants": [
