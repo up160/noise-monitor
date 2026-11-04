@@ -72,6 +72,20 @@ test("the held floor keeps a twenty-minute session open after its original backg
   assert.equal(session.lamax, 55);
 });
 
+test("the held floor ignores louder bridged non-music after the original background expires", () => {
+  const bridge = { dba: 50, band63: 43, band125: 40 };
+  const levels = [quiet];
+  for (let i = 0; i < 10; i += 1) {
+    levels.push(...repeat(120, music), ...repeat(10, bridge));
+  }
+  levels.push(...repeat(120, music));
+  const sessions = sequence(levels);
+  assert.equal(sessions.length, 1);
+  assert.equal(sessions[0].start, "2026-10-23T19:00:01Z");
+  assert.equal(sessions[0].end, "2026-10-23T19:23:41Z");
+  assert.equal(sessions[0].durationSeconds, 1420);
+});
+
 test("floor percentile is nearest-rank per band, excluding the current reading", () => {
   const background = Array.from({ length: 10 }, (_, i) => ({ dba: 30 + i, band63: 40 + i, band125: 50 + i }));
   const level = { dba: 37, band63: 49, band125: 0 };
@@ -162,6 +176,25 @@ test("results are independent of the process time zone", () => {
   for (const TZ of ["Pacific/Honolulu", "Asia/Tokyo"]) {
     const output = execFileSync(process.execPath, ["--input-type=module", "-e", script], { env: { ...process.env, TZ }, encoding: "utf8" });
     assert.deepEqual(JSON.parse(output), detectSessions(readings));
+  }
+});
+
+test("undefined options use defaults and non-object options throw RangeError", () => {
+  assert.deepEqual(detectSessions([], undefined), []);
+  for (const options of [null, false, 0, "", Symbol("options"), 1n, () => {}]) {
+    assert.throws(() => detectSessions([], options), {
+      name: "RangeError", message: "options must be an object",
+    });
+  }
+});
+
+test("unknown options throw RangeError naming every unknown key", () => {
+  for (const options of [{ maxBridgeSecond: -5 }, { maxBridgeSecond: -5, floorWindowSecond: 600 }, { toString: 1 }]) {
+    assert.throws(() => detectSessions([], options), (error) => {
+      assert.ok(error instanceof RangeError);
+      for (const name of Object.keys(options)) assert.ok(error.message.includes(name));
+      return true;
+    });
   }
 });
 

@@ -12,11 +12,24 @@ function lowerBound(values, value) {
 }
 
 /** Detect music against earlier non-music readings, holding the floor during candidates. */
-export function detectSessions(readings, {
-  floorWindowSeconds = 600, floorPercentile = 10, dbaMarginDb = 6, bandMarginDb = 8,
-  minMusicSeconds = 120, maxBridgeSeconds = 30, maxReadingGapSeconds = 60,
-  lateNightStartHour = 23, lateNightEndHour = 7,
-} = {}) {
+export function detectSessions(readings, options = {}) {
+  if (options === null || typeof options !== "object") {
+    throw new RangeError("options must be an object");
+  }
+  const defaults = {
+    floorWindowSeconds: 600, floorPercentile: 10, dbaMarginDb: 6, bandMarginDb: 8,
+    minMusicSeconds: 120, maxBridgeSeconds: 30, maxReadingGapSeconds: 60,
+    lateNightStartHour: 23, lateNightEndHour: 7,
+  };
+  const unknown = Object.keys(options).filter((name) => !Object.hasOwn(defaults, name));
+  if (unknown.length) throw new RangeError(`Unknown options: ${unknown.join(", ")}`);
+  const {
+    floorWindowSeconds = defaults.floorWindowSeconds, floorPercentile = defaults.floorPercentile,
+    dbaMarginDb = defaults.dbaMarginDb, bandMarginDb = defaults.bandMarginDb,
+    minMusicSeconds = defaults.minMusicSeconds, maxBridgeSeconds = defaults.maxBridgeSeconds,
+    maxReadingGapSeconds = defaults.maxReadingGapSeconds,
+    lateNightStartHour = defaults.lateNightStartHour, lateNightEndHour = defaults.lateNightEndHour,
+  } = options;
   for (const [name, value, minimum] of [
     ["floorWindowSeconds", floorWindowSeconds, 1], ["minMusicSeconds", minMusicSeconds, 1],
     ["maxBridgeSeconds", maxBridgeSeconds, 0], ["maxReadingGapSeconds", maxReadingGapSeconds, 0],

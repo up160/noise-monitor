@@ -105,6 +105,24 @@ test("CLI wrong argument counts exit 2 with usage on stderr", () => {
   }
 });
 
+test("CLI refuses output resolving to the input file without changing the readings", () => {
+  const directory = mkdtempSync(join(tmpdir(), "noise-monitor-same-file-"));
+  try {
+    const input = join(directory, "in.csv");
+    const content = readFileSync(new URL("fixtures/evening.csv", import.meta.url), "utf8")
+      .split("\n").slice(0, 3).join("\n") + "\n";
+    writeFileSync(input, content);
+    for (const [source, output] of [[input, input], ["in.csv", "in.csv"], ["in.csv", "./in.csv"], ["in.csv", "unused/../in.csv"]]) {
+      const result = spawnSync(process.execPath, [cli, source, output], { encoding: "utf8", cwd: directory });
+      assert.equal(result.status, 2);
+      assert.match(result.stderr, /Output must not resolve to the input file/);
+      assert.equal(readFileSync(input, "utf8"), content);
+    }
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
 test("CLI read, parse and write failures exit 1 with their reason on stderr", () => {
   const directory = mkdtempSync(join(tmpdir(), "noise-monitor-errors-"));
   try {

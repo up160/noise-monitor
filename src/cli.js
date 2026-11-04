@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { basename } from "node:path";
+import { basename, resolve } from "node:path";
 import { parseReadings } from "./readings.js";
 import { windowLevels } from "./windows.js";
 import { detectSessions } from "./sessions.js";
@@ -8,6 +8,9 @@ import { renderReport } from "./report.js";
 const args = process.argv.slice(2);
 if (args.length !== 2) {
   console.error("Usage: node src/cli.js <readings.csv> <out.html>");
+  process.exitCode = 2;
+} else if (resolve(args[1]) === resolve(args[0])) {
+  console.error("Output must not resolve to the input file");
   process.exitCode = 2;
 } else {
   try {
