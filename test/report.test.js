@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, linkSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -123,6 +123,47 @@ test("CLI refuses output resolving to the input file without changing the readin
   }
 });
 
+for (const [name, makeLink] of [["hard link", linkSync], ["symlink", symlinkSync]]) {
+  test(`CLI refuses a ${name} to the input without changing the readings`, () => {
+    const directory = mkdtempSync(join(tmpdir(), "noise-monitor-linked-file-"));
+    try {
+      const input = join(directory, "readings.csv");
+      const output = join(directory, "report.html");
+      const content = readFileSync(new URL("fixtures/evening.csv", import.meta.url), "utf8")
+        .split("\n").slice(0, 3).join("\n") + "\n";
+      writeFileSync(input, content);
+      makeLink(input, output);
+      const result = spawnSync(process.execPath, [cli, input, output], { encoding: "utf8", cwd: directory });
+      assert.equal(result.status, 2, result.stderr);
+      assert.match(result.stderr, /Output must not resolve to the input file/);
+      assert.equal(readFileSync(input, "utf8"), content);
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
+    }
+  });
+}
+
+test("CLI refuses a case-variant input name without changing the readings", (t) => {
+  const directory = mkdtempSync(join(tmpdir(), "noise-monitor-case-variant-"));
+  try {
+    const input = join(directory, "readings.csv");
+    const output = input.toUpperCase();
+    const content = readFileSync(new URL("fixtures/evening.csv", import.meta.url), "utf8")
+      .split("\n").slice(0, 3).join("\n") + "\n";
+    writeFileSync(input, content);
+    if (!existsSync(output)) {
+      t.skip("The temporary file system is case-sensitive");
+      return;
+    }
+    const result = spawnSync(process.execPath, [cli, input, output], { encoding: "utf8", cwd: directory });
+    assert.equal(result.status, 2, result.stderr);
+    assert.match(result.stderr, /Output must not resolve to the input file/);
+    assert.equal(readFileSync(input, "utf8"), content);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
 test("CLI read, parse and write failures exit 1 with their reason on stderr", () => {
   const directory = mkdtempSync(join(tmpdir(), "noise-monitor-errors-"));
   try {
@@ -131,6 +172,7 @@ test("CLI read, parse and write failures exit 1 with their reason on stderr", ()
     const fixture = fileURLToPath(new URL("fixtures/evening.csv", import.meta.url));
     for (const [input, output, reason] of [
       [join(directory, "missing.csv"), join(directory, "report.html"), /ENOENT/],
+      [join(directory, "missing.csv"), malformed, /ENOENT/],
       [malformed, join(directory, "report.html"), /Line 2: timestamp must be ISO 8601/],
       [fixture, join(directory, "missing", "report.html"), /ENOENT/],
     ]) {
